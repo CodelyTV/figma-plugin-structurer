@@ -1,4 +1,4 @@
-import { mock, mockDeep } from "jest-mock-extended";
+import { mock } from "jest-mock-extended";
 
 import { CreatePagesCommand } from "../../src/scene-commands/create-layers/CreatePagesCommand";
 import { CreatePagesCommandHandler } from "../../src/scene-commands/create-layers/CreatePagesCommandHandler";
@@ -15,18 +15,53 @@ describe("CreatePagesCommandHandler", () => {
   });
 
   it("notifies the end used with a farewell message", () => {
-    const figmaPluginApiMock = mockDeep<PluginAPI>();
+    const figmaPluginApiMock = {
+      notify: jest.fn(),
+      currentPage: {
+        name: "",
+      },
+      createPage: jest.fn().mockReturnValue({ name: "" }),
+    } as unknown as PluginAPI;
+
     const commandHandler = new CreatePagesCommandHandler(figmaPluginApiMock);
     const command = new CreatePagesCommand();
-
     commandHandler.handle(command);
-    const farewellMessage = "✅ Pages created!";
-    expect(figmaPluginApiMock.notify).toHaveBeenCalledWith(farewellMessage);
 
-    // figmaPluginApiMock.currentPage.name.calledWith("🎇  Cover");
-    // expect(figmaPluginApiMock.currentPage.name).toHaveBeenCalledWith(
-    //   "🎇  Cover"
-    // );
-    // expect(figmaPluginApiMock.createPage).toHaveBeenCalled();
+    assertExecutionHasBeenNotified(figmaPluginApiMock);
+    assertCoverPageHasBeenRenamed(figmaPluginApiMock);
+    assertOtherPagesHasBeenCreated(figmaPluginApiMock);
   });
 });
+
+function assertExecutionHasBeenNotified(figmaPluginApiMock: PluginAPI) {
+  const farewellMessage = "✅ Pages created!";
+  const options = { timeout: 2000 };
+
+  expect(figmaPluginApiMock.notify).toHaveBeenCalledWith(
+    farewellMessage,
+    options
+  );
+}
+
+function assertCoverPageHasBeenRenamed(figmaPluginApiMock: PluginAPI) {
+  expect(figmaPluginApiMock.currentPage.name).toBe("🎇  Cover");
+}
+
+function assertOtherPagesHasBeenCreated(figmaPluginApiMock: PluginAPI) {
+  const pageToBeCreatedNames = [
+    "---",
+    "💻  Desktop",
+    "📱  Mobile",
+    "---",
+    "💀  Graveyard",
+  ];
+
+  pageToBeCreatedNames.forEach(() =>
+    expect(figmaPluginApiMock.createPage).toHaveBeenCalled()
+  );
+
+  // 🚩🚘🚩🚨🚩🚘🚩🚨🚩🚘🚩🚨🚩🚘🚩🚨🚩🚘🚩🚨🚩🚘🚩🚨🚩🚘🚩🚨🚩🚘🚩
+  // 🚩 Here we can see the limitations of the Figma API.     🚩
+  // 🚩 We can not test out the names of the created pages :/ 🚩
+  // 🚩🚘🚩🚨🚩🚘🚩🚨🚩🚘🚩🚨🚩🚘🚩🚨🚩🚘🚩🚨🚩🚘🚩🚨🚩🚘🚩🚨🚩🚘🚩
+}
