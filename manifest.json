@@ -1,6 +1,6 @@
 {
-  "name": "Codely Figma Plugin Skeleton",
-  "id": "1131536692847981535",
+  "name": "Codely Structurer Figma Plugin",
+  "id": "1139148181170685187",
   "api": "1.0.0",
   "main": "dist/figmaEntrypoint.js",
   "ui": "dist/ui.html",

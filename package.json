@@ -1,7 +1,7 @@
 {
-  "name": "figma-plugin-skeleton",
+  "name": "@codely/figma-plugin-structurer",
   "version": "1.0.0",
-  "description": "Bootstrap your new Figma Plugin with the bare minimum dependencies",
+  "description": "Figma Plugin for speeding up and ensure consistency in the structure of your Figma projects",
   "private": true,
   "scripts": {
     "build": "webpack",
@@ -12,14 +12,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/CodelyTV/figma-plugin-skeleton.git"
+    "url": "git+https://github.com/CodelyTV/figma-plugin-structurer.git"
   },
   "author": "codelytv",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/CodelyTV/figma-plugin-skeleton/issues"
+    "url": "https://github.com/CodelyTV/figma-plugin-structurer/issues"
   },
-  "homepage": "https://github.com/CodelyTV/figma-plugin-skeleton#readme",
+  "homepage": "https://github.com/CodelyTV/figma-plugin-structurer#readme",
   "devDependencies": {
     "@figma/plugin-typings": "^1.49.0",
     "@swc/core": "^1.2.218",
