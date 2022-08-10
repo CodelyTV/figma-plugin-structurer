@@ -1,9 +1,9 @@
 import { handleCommand } from "./commands-setup/handleCommand";
-import { CreateLayersCommand } from "./scene-commands/create-layers/CreateLayersCommand";
+import { CreatePagesCommand } from "./scene-commands/create-layers/CreatePagesCommand";
 
 createInvisibleUiForBrowserApiAccess();
 
-await handleCommand(new CreateLayersCommand());
+await handleCommand(new CreatePagesCommand());
 
 function createInvisibleUiForBrowserApiAccess() {
   const randomHtmlToAvoidFigmaError = "<body></body>";
