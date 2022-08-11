@@ -15,13 +15,25 @@ describe("CreatePagesCommandHandler", () => {
   });
 
   it("notifies the end used with a farewell message", () => {
-    const figmaPluginApiMock = {
+    type DeepPartial<T> = T extends object
+      ? {
+          [P in keyof T]?: DeepPartial<T[P]>;
+        }
+      : T;
+
+    function mockFigmaPluginApi(
+      propertiesToMock: DeepPartial<PluginAPI>
+    ): PluginAPI {
+      return propertiesToMock as unknown as PluginAPI;
+    }
+
+    const figmaPluginApiMock = mockFigmaPluginApi({
       notify: jest.fn(),
       currentPage: {
         name: "",
       },
       createPage: jest.fn().mockReturnValue({ name: "" }),
-    } as unknown as PluginAPI;
+    });
 
     const commandHandler = new CreatePagesCommandHandler(figmaPluginApiMock);
     const command = new CreatePagesCommand();
