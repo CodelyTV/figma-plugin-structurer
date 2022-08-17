@@ -27,11 +27,11 @@ export class CreatePagesCommandHandler
   }
 
   private renameCurrentPageToCover() {
-    figma.currentPage.name = "🎇  Cover";
+    this.figma.currentPage.name = "🎇  Cover";
   }
 
   private createPage(name: string) {
-    const page = figma.createPage();
+    const page = this.figma.createPage();
     page.name = name;
   }
 }
