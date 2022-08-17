@@ -2,6 +2,7 @@ import { mock } from "jest-mock-extended";
 
 import { CreatePagesCommand } from "../../src/scene-commands/create-layers/CreatePagesCommand";
 import { CreatePagesCommandHandler } from "../../src/scene-commands/create-layers/CreatePagesCommandHandler";
+import { figmaPluginApiMockForCreatePagesCommand } from "../figma-mocks/figma-mocks";
 
 describe("CreatePagesCommandHandler", () => {
   it("can be instantiated without throwing errors", () => {
@@ -15,51 +16,51 @@ describe("CreatePagesCommandHandler", () => {
   });
 
   it("notifies the end used with a farewell message", () => {
-    type DeepPartial<T> = T extends object
-      ? {
-          [P in keyof T]?: DeepPartial<T[P]>;
-        }
-      : T;
-
-    function mockFigmaPluginApi(
-      propertiesToMock: DeepPartial<PluginAPI>
-    ): PluginAPI {
-      return propertiesToMock as unknown as PluginAPI;
-    }
-
-    const figmaPluginApiMock = mockFigmaPluginApi({
-      notify: jest.fn(),
-      currentPage: {
-        name: "",
-      },
-      createPage: jest.fn().mockReturnValue({ name: "" }),
-    });
-
-    const commandHandler = new CreatePagesCommandHandler(figmaPluginApiMock);
+    const commandHandler = new CreatePagesCommandHandler(
+      figmaPluginApiMockForCreatePagesCommand
+    );
     const command = new CreatePagesCommand();
+
     commandHandler.handle(command);
 
-    assertExecutionHasBeenNotified(figmaPluginApiMock);
-    assertCoverPageHasBeenRenamed(figmaPluginApiMock);
-    assertOtherPagesHasBeenCreated(figmaPluginApiMock);
+    assertExecutionHasBeenNotified(figmaPluginApiMockForCreatePagesCommand);
+  });
+
+  it("rename Cover Page", () => {
+    const commandHandler = new CreatePagesCommandHandler(
+      figmaPluginApiMockForCreatePagesCommand
+    );
+    const command = new CreatePagesCommand();
+
+    commandHandler.handle(command);
+
+    assertCoverPageHasBeenRenamed(figmaPluginApiMockForCreatePagesCommand);
+  });
+
+  it("create secondary pages", () => {
+    const commandHandler = new CreatePagesCommandHandler(
+      figmaPluginApiMockForCreatePagesCommand
+    );
+    const command = new CreatePagesCommand();
+
+    commandHandler.handle(command);
+
+    assertOtherPagesHasBeenCreated(figmaPluginApiMockForCreatePagesCommand);
   });
 });
 
-function assertExecutionHasBeenNotified(figmaPluginApiMock: PluginAPI) {
+function assertExecutionHasBeenNotified(mock: PluginAPI) {
   const farewellMessage = "✅ Pages created!";
   const options = { timeout: 2000 };
 
-  expect(figmaPluginApiMock.notify).toHaveBeenCalledWith(
-    farewellMessage,
-    options
-  );
+  expect(mock.notify).toHaveBeenCalledWith(farewellMessage, options);
 }
 
-function assertCoverPageHasBeenRenamed(figmaPluginApiMock: PluginAPI) {
-  expect(figmaPluginApiMock.currentPage.name).toBe("🎇  Cover");
+function assertCoverPageHasBeenRenamed(mock: PluginAPI) {
+  expect(mock.currentPage.name).toBe("🎇  Cover");
 }
 
-function assertOtherPagesHasBeenCreated(figmaPluginApiMock: PluginAPI) {
+function assertOtherPagesHasBeenCreated(mock: PluginAPI) {
   const pageToBeCreatedNames = [
     "---",
     "💻  Desktop",
@@ -69,7 +70,7 @@ function assertOtherPagesHasBeenCreated(figmaPluginApiMock: PluginAPI) {
   ];
 
   pageToBeCreatedNames.forEach(() =>
-    expect(figmaPluginApiMock.createPage).toHaveBeenCalled()
+    expect(mock.createPage).toHaveBeenCalled()
   );
 
   // 🚩🚘🚩🚨🚩🚘🚩🚨🚩🚘🚩🚨🚩🚘🚩🚨🚩🚘🚩🚨🚩🚘🚩🚨🚩🚘🚩🚨🚩🚘🚩
