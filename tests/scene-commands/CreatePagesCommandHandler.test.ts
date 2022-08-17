@@ -1,7 +1,7 @@
 import { mock } from "jest-mock-extended";
 
-import { CreatePagesCommand } from "../../src/scene-commands/create-layers/CreatePagesCommand";
-import { CreatePagesCommandHandler } from "../../src/scene-commands/create-layers/CreatePagesCommandHandler";
+import { CreatePagesCommand } from "../../src/scene-commands/create-pages/CreatePagesCommand";
+import { CreatePagesCommandHandler } from "../../src/scene-commands/create-pages/CreatePagesCommandHandler";
 import { figmaPluginApiMockForCreatePagesCommand } from "../figma-mocks/figma-mocks";
 
 describe("CreatePagesCommandHandler", () => {

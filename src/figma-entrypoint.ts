@@ -1,5 +1,5 @@
 import { handleCommand } from "./commands-setup/handleCommand";
-import { CreatePagesCommand } from "./scene-commands/create-layers/CreatePagesCommand";
+import { CreatePagesCommand } from "./scene-commands/create-pages/CreatePagesCommand";
 
 createInvisibleUiForBrowserApiAccess();
 
