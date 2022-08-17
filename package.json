@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/CodelyTV/figma-plugin-structurer#readme",
   "devDependencies": {
-    "@figma/plugin-typings": "^1.49.0",
+    "@figma/plugin-typings": "^1.50.0",
     "@swc/core": "^1.2.218",
     "@swc/jest": "^0.2.22",
     "@types/jest": "^28.1.6",

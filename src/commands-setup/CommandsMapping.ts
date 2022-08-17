@@ -1,5 +1,5 @@
 import { NetworkRequestCommandHandler } from "../browser-commands/network-request/NetworkRequestCommandHandler";
-import { CreatePagesCommandHandler } from "../scene-commands/create-layers/CreatePagesCommandHandler";
+import { CreatePagesCommandHandler } from "../scene-commands/create-pages/CreatePagesCommandHandler";
 import { Command } from "./Command";
 import { CommandHandler } from "./CommandHandler";
 
