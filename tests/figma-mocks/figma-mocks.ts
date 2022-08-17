@@ -14,6 +14,20 @@ export const figmaPluginApiMockForCreatePagesCommand = mockFigmaPluginApiWith({
   notify: jest.fn(),
   currentPage: {
     name: "",
+    appendChild: jest.fn(),
   },
+  createFrame: jest
+    .fn()
+    .mockReturnValue({ width: 0, appendChild: jest.fn(), resize: jest.fn() }),
   createPage: jest.fn().mockReturnValue({ name: "" }),
+  createText: jest.fn().mockReturnValue({
+    fontName: {},
+    characters: {},
+    fontSize: {},
+    textAlignHorizontal: {},
+  }),
+  loadFontAsync: jest.fn(),
+  viewport: {
+    scrollAndZoomIntoView: jest.fn(),
+  },
 });
