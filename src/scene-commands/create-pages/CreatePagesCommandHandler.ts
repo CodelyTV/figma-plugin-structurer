@@ -1,10 +1,24 @@
 import { CommandHandler } from "../../commands-setup/CommandHandler";
 import { CreatePagesCommand } from "./CreatePagesCommand";
+import {
+  BadgeStyle,
+  CurrentUserAvatarBadgeCreator,
+} from "./CurrentUserAvatarBadgeCreator";
 
 export class CreatePagesCommandHandler
   implements CommandHandler<CreatePagesCommand>
 {
-  constructor(private readonly figma: PluginAPI) {}
+  private fontFamily = "Moderat";
+
+  private frameDimensions = {
+    width: 1240,
+    height: 640,
+  };
+
+  constructor(
+    private readonly currentUserAvatarBadgeCreator: CurrentUserAvatarBadgeCreator,
+    private readonly figma: PluginAPI
+  ) {}
 
   // `command` argument needed due to polymorphism.
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -47,7 +61,7 @@ export class CreatePagesCommandHandler
       frame.counterAxisAlignItems = "CENTER";
       frame.paddingTop = 100;
       frame.itemSpacing = 30;
-      frame.resize(1240, 640);
+      frame.resize(this.frameDimensions.width, this.frameDimensions.height);
 
       return frame;
     };
@@ -58,7 +72,7 @@ export class CreatePagesCommandHandler
     ): Promise<TextNode> => {
       const heading = this.figma.createText();
 
-      const font = { family: "Moderat", style: "Bold" };
+      const font = { family: this.fontFamily, style: "Bold" };
       await this.figma.loadFontAsync(font);
       heading.fontName = font;
       heading.characters = name;
@@ -79,7 +93,7 @@ export class CreatePagesCommandHandler
     ): Promise<TextNode> => {
       const description = this.figma.createText();
 
-      const font = { family: "Moderat", style: "Regular" };
+      const font = { family: this.fontFamily, style: "Regular" };
       await this.figma.loadFontAsync(font);
       description.fontName = font;
       description.fontSize = 64;
@@ -92,17 +106,35 @@ export class CreatePagesCommandHandler
 
       return description;
     };
+
     const frame = await createFrame();
+    this.figma.currentPage.appendChild(frame);
+
     const heading = await createHeading(frame, "✌️ Add your title ✌️");
+    frame.appendChild(heading);
+
     const description = await createDescription(
       frame,
       heading,
       "🪩 Add your description 🪩"
     );
-
-    this.figma.currentPage.appendChild(frame);
-    frame.appendChild(heading);
     frame.appendChild(description);
+
+    const badgeSize = 100;
+    const currentUserAvatarBadgeStyle: BadgeStyle = {
+      avatarImage: {
+        size: badgeSize,
+        xAxisPosition: this.frameDimensions.width - badgeSize,
+        yAxisPosition: this.frameDimensions.height - badgeSize,
+      },
+      userNameText: {
+        fontSize: 14,
+        fontFamily: this.fontFamily,
+      },
+    };
+    await this.currentUserAvatarBadgeCreator.create(
+      currentUserAvatarBadgeStyle
+    );
 
     this.figma.currentPage.selection = [heading];
 

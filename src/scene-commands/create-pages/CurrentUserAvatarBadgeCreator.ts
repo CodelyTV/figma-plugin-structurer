@@ -1,18 +1,25 @@
 import { NetworkRequestCommand } from "../../browser-commands/network-request/NetworkRequestCommand";
-import { CommandHandler } from "../../commands-setup/CommandHandler";
 import { executeCommand } from "../../commands-setup/executeCommand";
-import { PaintCurrentUserAvatarCommand } from "./PaintCurrentUserAvatarCommand";
 
-export class PaintCurrentUserAvatarCommandHandler
-  implements CommandHandler<PaintCurrentUserAvatarCommand>
-{
-  private readonly avatarImageSize = 100;
+export type BadgeStyle = {
+  avatarImage: {
+    size: number;
+    xAxisPosition: number;
+    yAxisPosition: number;
+  };
+  userNameText: {
+    fontSize: number;
+    fontFamily: string;
+  };
+};
 
+export class CurrentUserAvatarBadgeCreator {
   constructor(private readonly figma: PluginAPI) {}
 
-  // `command` argument needed due to polymorphism.
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  handle(command: PaintCurrentUserAvatarCommand): Promise<void> {
+  create(badgeStyle: BadgeStyle): Promise<void> {
+    console.log("CurrentUserAvatarBadgeCreator.create(badgeStyle): ");
+    console.log(badgeStyle);
+
     const currentUserAvatarUrl = this.figma.currentUser?.photoUrl;
     const currentUserName = this.figma.currentUser?.name;
 
@@ -32,6 +39,7 @@ export class PaintCurrentUserAvatarCommandHandler
         this.ensureToOnlyReceiveNetworkRequestResponse(command);
 
         await this.createAvatarBadge(
+          badgeStyle,
           command.payload as ArrayBuffer,
           currentUserName as string
         );
@@ -50,18 +58,16 @@ export class PaintCurrentUserAvatarCommandHandler
   }
 
   private async createAvatarBadge(
+    badgeStyle: BadgeStyle,
     imageBuffer: ArrayBuffer,
     userName: string
   ): Promise<void> {
-    const avatarImage = this.createAvatarImage(imageBuffer, userName);
-    const userNameText = await this.createAvatarText(userName);
-
-    const elementsToFocus = [avatarImage, userNameText];
-    this.figma.currentPage.selection = elementsToFocus;
-    this.figma.viewport.scrollAndZoomIntoView(elementsToFocus);
+    this.createAvatarImage(badgeStyle, imageBuffer, userName);
+    await this.createAvatarText(badgeStyle, userName);
   }
 
   private createAvatarImage(
+    badgeStyle: BadgeStyle,
     avatarImage: ArrayBuffer,
     currentUserName: string
   ): EllipseNode {
@@ -69,9 +75,12 @@ export class PaintCurrentUserAvatarCommandHandler
     const figmaImage = this.figma.createImage(imageUint8Array);
     const imageWrapper = this.figma.createEllipse();
 
-    imageWrapper.x = this.figma.viewport.center.x;
-    imageWrapper.y = this.figma.viewport.center.y;
-    imageWrapper.resize(this.avatarImageSize, this.avatarImageSize);
+    imageWrapper.x = badgeStyle.avatarImage.xAxisPosition;
+    imageWrapper.y = badgeStyle.avatarImage.yAxisPosition;
+    imageWrapper.resize(
+      badgeStyle.avatarImage.size,
+      badgeStyle.avatarImage.size
+    );
     imageWrapper.fills = [
       { type: "IMAGE", scaleMode: "FILL", imageHash: figmaImage.hash },
     ];
@@ -82,17 +91,25 @@ export class PaintCurrentUserAvatarCommandHandler
     return imageWrapper;
   }
 
-  private async createAvatarText(userName: string): Promise<TextNode> {
+  private async createAvatarText(
+    badgeStyle: BadgeStyle,
+    userName: string
+  ): Promise<TextNode> {
     const userNameText = this.figma.createText();
     userNameText.x = this.figma.viewport.center.x - userName.length / 2;
     userNameText.y =
       this.figma.viewport.center.y +
-      this.avatarImageSize +
-      this.avatarImageSize / 12;
+      badgeStyle.avatarImage.size +
+      badgeStyle.avatarImage.size / badgeStyle.userNameText.fontSize;
 
-    await this.figma.loadFontAsync(userNameText.fontName as FontName);
+    const fontName: FontName = {
+      family: badgeStyle.userNameText.fontFamily,
+      style: "Regular",
+    };
+    await this.figma.loadFontAsync(fontName);
+
     userNameText.characters = userName;
-    userNameText.fontSize = 14;
+    userNameText.fontSize = badgeStyle.userNameText.fontSize;
 
     return userNameText;
   }

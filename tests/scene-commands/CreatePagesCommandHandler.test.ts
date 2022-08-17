@@ -2,21 +2,33 @@ import { mock } from "jest-mock-extended";
 
 import { CreatePagesCommand } from "../../src/scene-commands/create-pages/CreatePagesCommand";
 import { CreatePagesCommandHandler } from "../../src/scene-commands/create-pages/CreatePagesCommandHandler";
+import { CurrentUserAvatarBadgeCreator } from "../../src/scene-commands/create-pages/CurrentUserAvatarBadgeCreator";
 import { figmaPluginApiMockForCreatePagesCommand } from "../figma-mocks/figma-mocks";
 
 describe("CreatePagesCommandHandler", () => {
   it("can be instantiated without throwing errors", () => {
     const figmaPluginApiMock = mock<PluginAPI>();
 
+    const currentUserAvatarBadgeCreator = new CurrentUserAvatarBadgeCreator(
+      figmaPluginApiMock
+    );
     const commandHandlerInstantiator = () => {
-      new CreatePagesCommandHandler(figmaPluginApiMock);
+      new CreatePagesCommandHandler(
+        currentUserAvatarBadgeCreator,
+        figmaPluginApiMock
+      );
     };
 
     expect(commandHandlerInstantiator).not.toThrow(TypeError);
   });
 
   it("notifies the end used with a farewell message", async () => {
+    const currentUserAvatarBadgeCreator = new CurrentUserAvatarBadgeCreator(
+      figmaPluginApiMockForCreatePagesCommand
+    );
+
     const commandHandler = new CreatePagesCommandHandler(
+      currentUserAvatarBadgeCreator,
       figmaPluginApiMockForCreatePagesCommand
     );
     const command = new CreatePagesCommand();
@@ -27,7 +39,12 @@ describe("CreatePagesCommandHandler", () => {
   });
 
   it("rename Cover Page", async () => {
+    const currentUserAvatarBadgeCreator = new CurrentUserAvatarBadgeCreator(
+      figmaPluginApiMockForCreatePagesCommand
+    );
+
     const commandHandler = new CreatePagesCommandHandler(
+      currentUserAvatarBadgeCreator,
       figmaPluginApiMockForCreatePagesCommand
     );
     const command = new CreatePagesCommand();
@@ -38,7 +55,12 @@ describe("CreatePagesCommandHandler", () => {
   });
 
   it("create secondary pages", async () => {
+    const currentUserAvatarBadgeCreator = new CurrentUserAvatarBadgeCreator(
+      figmaPluginApiMockForCreatePagesCommand
+    );
+
     const commandHandler = new CreatePagesCommandHandler(
+      currentUserAvatarBadgeCreator,
       figmaPluginApiMockForCreatePagesCommand
     );
     const command = new CreatePagesCommand();
