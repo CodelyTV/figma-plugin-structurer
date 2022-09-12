@@ -58,7 +58,7 @@ export class CreatePagesCommandHandler
     ): Promise<TextNode> => {
       const heading = this.figma.createText();
 
-      const font = { family: "Moderat", style: "Bold" };
+      const font = { family: "Arial", style: "Bold" };
       await this.figma.loadFontAsync(font);
       heading.fontName = font;
       heading.characters = name;
@@ -79,7 +79,7 @@ export class CreatePagesCommandHandler
     ): Promise<TextNode> => {
       const description = this.figma.createText();
 
-      const font = { family: "Moderat", style: "Regular" };
+      const font = { family: "Arial", style: "Regular" };
       await this.figma.loadFontAsync(font);
       description.fontName = font;
       description.fontSize = 64;
