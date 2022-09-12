@@ -1,5 +1,109 @@
+:root {
+    --unit: 1rem;
+    --gray-lighter: efefef;
+    --gray: #787676;
+    --blue: #1a2233;
+    --white: #fff;
+    --green: #3cff64;
+    --figma-color-bg: var(--blue) !important;
+}
+
 body {
-    background-color: var(--figma-color-bg);
-    color: var(--figma-color-text);
-    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    flex-wrap: nowrap;
+    margin: 0;
+    padding: 0;
+}
+
+main {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    flex: 1 0 auto;
+    padding: var(--unit);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+}
+
+button {
+    background: transparent;
+    border: none;
+    outline: none;
+}
+
+.pages-list {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+}
+
+.pages-list--item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 8px;
+    height: 42px;
+    background-color: var(--gray-lighter);
+    margin-bottom: 8px;
+    border-radius: 6px;
+}
+
+.pages-list--item-name {
+    display: flex;
+    justify-content: flex-start;
+    font-size: var(--unit);
+    line-height: calc(var(--unit) * 2);
+    font-family: sans-serif;
+}
+
+.pages-list--item-actions {
+    display: flex;
+}
+
+.pages-list--item-actions:hover {
+    color: var(--gray-lighter);
+}
+
+footer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    flex-shrink: 0;
+    height: 64px;
+    background: var(--white);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+    padding: 0 16px;
+}
+
+footer form {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+footer form button {
+    font-size: 14px;
+    font-weight: 900;
+    padding: 0.6rem;
+    border-radius: 6px;
+}
+
+footer form button.primary {
+    background-color: var(--green);
+    color: var(--blue);
+}
+
+footer form button.secondary {
+    background-color: var(--blue);
+    color: var(--white);
 }

@@ -12,5 +12,5 @@ function registerPluginUiCommandHandlers(): void {
 
 function showUi(): void {
   figma.showUI(__html__, { themeColors: true });
-  figma.ui.resize(450, 300);
+  figma.ui.resize(270, 440);
 }
