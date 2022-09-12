@@ -3,5 +3,6 @@
   "id": "1139148181170685187",
   "api": "1.0.0",
   "main": "dist/figmaEntrypoint.js",
+  "ui": "dist/ui.html",
   "editorType": ["figma"]
 }
